@@ -1,85 +1,96 @@
 /* Global Variables */
-const appform = document.querySelector('.app-form');
-const icons = document.querySelectorAll('.app-icon');
 // Base URL and API Key for OpenWeatherMap API
-const apiURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-const apiKey = '&appid=d6ad1e5d413f9edc76af038fbf5dbe54';
+const apiURL = "http://api.openweathermap.org/data/2.5/weather?zip=";
+const apiKey = "&appid=d6ad1e5d413f9edc76af038fbf5dbe54";
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+let newDate = d.getMonth() + "." + d.getDate() + "." + d.getFullYear();
 
 // Event listener to add function to existing HTML DOM element
-document.getElementById('generate').addEventListener('click', generateData);
+document
+  .querySelector("#generate")
+  .addEventListener("click", handleGenerateClick);
 
-/* Function called by event listener */
-function generateData($event) {
-    $event.preventDefault();
-    // get user input values
-    const zip = document.getElementById('zip').value;
-    const content = document.getElementById('feelings').value;
+/**
+ * @description Handle click event on generate button
+ * @param {Event} $event
+ */
+function handleGenerateClick($event) {
+  $event.preventDefault();
+  const zip = document.querySelector("#zip").value;
+  const content = document.querySelector("#feelings").value;
 
-    getWeatherData(apiURL, zip, apiKey)
-        .then(function (userData) {
-            // add data to POST request
-            postData('/postData', {
-                date: newDate,
-                temp: userData.main.temp,
-                content
-            })
-        }).then(function (data) {
-            // call updateUI to update browser content
-            updateUI();
-        })
-    // reset form
-    appform.reset();
+  if (zip && content) {
+    getWeatherData(apiURL, zip, apiKey).then(function (userData) {
+      postUserData("/postData", {
+        date: newDate,
+        temp: userData.main.temp,
+        content,
+      }).then(function (data) {
+        updateUI();
+      });
+    });
+  } else {
+    console.log("Please enter zip and feeling !!");
+    return;
+  }
 }
 
-/* Function to GET Web API Data*/
-const getWeatherData = async (baseURL, zip, apiKey) => {
-    // res equals to the result of fetch function
-    const res = await fetch(baseURL + zip + apiKey);
-    try {
-        // userData equals to the result of fetch function
-        const userData = await res.json();
-        return userData;
-    } catch (error) {
-        console.log("error", error);
-    }
-};
+/**
+ * @description Get weather data using fetch api
+ * @param {string} baseURL
+ * @param {string} zip
+ * @param {string} apiKey
+ */
+async function getWeatherData(baseURL, zip, apiKey) {
+  const res = await fetch(baseURL + zip + apiKey);
+  try {
+    const userData = await res.json();
+    return userData;
+  } catch (error) {
+    console.log("Error fetching data ", error);
+  }
+}
 
-/* Function to POST data */
-const postData = async (url, data) => {
-    const req = await fetch(url, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        },
-        body: JSON.stringify({
-            date: data.date,
-            temp: data.temp,
-            content: data.content
-        })
-    });
+/**
+ * @description Get weather data using fetch api
+ * @param {string} url
+ * @param {Object} data
+ */
+async function postUserData(url, data) {
+  const request = await fetch(url, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    body: JSON.stringify({
+      date: data.date,
+      temp: data.temp,
+      content: data.content,
+    }),
+  });
 
-    try {
-        const data = await req.json();
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-};
+  try {
+    const res = await request.json();
+    return res;
+  } catch (error) {
+    console.log("Error posting data ", error);
+  }
+}
 
-const updateUI = async () => {
-    const req = await fetch('/getData');
-    try {
-        const allData = await req.json();
-        icons.forEach(icon => icon.style.opacity = '1');
-        // update new entry values
-        document.getElementById('date').innerHTML = allData.date;
-        document.getElementById('temp').innerHTML = allData.temp;
-        document.getElementById('content').innerHTML = allData.content;
-    } catch (error) {
-        console.log("error", error);
-    }
-};
+/**
+ * @description Update ui using data from server
+ */
+async function updateUI() {
+  const res = await fetch("/getData");
+  try {
+    document.getElementById("data-holder").classList.remove("invisible");
+    const allData = await res.json();
+    document.querySelector("#date").innerHTML = allData.date;
+    document.querySelector("#temp").innerHTML = allData.temp;
+    document.querySelector("#content").innerHTML = allData.content;
+  } catch (error) {
+    console.log("Error updating UI ", error);
+  }
+}

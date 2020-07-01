@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather Journal</title>
+    <script src="https://kit.fontawesome.com/a83dba7890.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Weather Journal</title>
-  <script src="https://kit.fontawesome.com/a83dba7890.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-  <div class="wrapper-app">
-    <div id="app">
-      <div class="holder headline">
-        <h1 class="headline-heading">Weather Journal App</h1>
-      </div>
-      <form class="app-form" autocomplete="off">
-        <div class="holder zip">
-          <!-- as I did translate effect on labels I moved placeholder value 'enter zip code' to label -->
-          <input type="text" id="zip" maxlength="10" required="" placeholder="">
-          <label for="zip" class="zip-label">enter zip code here (US only)</label>
-        </div>
-        <div class="holder feel">
-          <textarea class="feel-input" id="feelings" maxlength="35" required=""></textarea>
-          <label for="feelings">how are you feeling today?</label>
-        </div>
-        <button id="generate" type="submit"> Generate </button>
-      </form>
-      <div class="holder app">
-        <h2 class="app-title">Most Recent app</h2>
-        <div id="appHolder">
-          <div class="app-date">
-            <i class="fas fa-calendar-day app-icon"></i>
-            <!-- content in this div is updated dynamically-->
-            <div id="date"></div>
+  <body>
+    <div class="wrapper-app container">
+      <div class="row">
+        <div class="col-3"></div>
+        <div class="row col-6">
+          <div class="col-12">
+            <div class="row mt-lg-5">
+              <h1 class="headline-heading m-auto">Weather Journal App</h1>
+            </div>
+            <div class="row mt-lg-5">
+              <form class="app-form col-12" autocomplete="off">
+                <div class="form-group col-12">
+                  <label for="zip">Enter zip code here</label>
+                  <input type="text" class="form-control" id="zip" />
+                </div>
+                <div class="form-group col-12">
+                  <label for="feelings">Feelings</label>
+                  <textarea class="form-control" id="feelings"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="row mt-lg-3">
+              <button id="generate" class="btn btn-lg btn-primary m-auto">
+                Generate
+              </button>
+            </div>
+            <div
+              id="data-holder"
+              class="row mt-lg-5 invisible justify-content-between"
+            >
+              <div class="app-date col-4 row">
+                <i class="fas fa-calendar-day app-icon col-4"></i>
+                <!-- content in this div is updated dynamically-->
+                <div id="date" class="col-8"></div>
+              </div>
+              <div class="app-temp col-4 row">
+                <i class="fas fa-thermometer-half app-icon col-4"></i>
+                <!-- content in this div is updated dynamically-->
+                <div id="temp" class="col-8"></div>
+              </div>
+              <div class="app-content col-4 row">
+                <i class="fas fa-user-circle app-icon col-4"></i>
+                <!-- content in this div is updated dynamically-->
+                <div id="content" class="col-8"></div>
+              </div>
+            </div>
           </div>
-          <div class="app-temp">
-            <i class="fas fa-thermometer-half app-icon"></i>
-            <!-- content in this div is updated dynamically-->
-            <div id="temp"></div>
-          </div>
-          <div class="app-content">
-            <i class="fas fa-user-circle app-icon"></i>
-            <!-- content in this div is updated dynamically-->
-            <div id="content"></div>
-          </div>
         </div>
+        <div class="col-3"></div>
       </div>
     </div>
-  </div>
-  <script src="app.js" type="text/javascript"></script>
-
-</body>
-
+    <script src="app.js" type="text/javascript"></script>
+  </body>
 </html>
