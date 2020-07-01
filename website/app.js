@@ -4,7 +4,7 @@ const apiURL = "http://api.openweathermap.org/data/2.5/weather?zip=";
 const apiKey = "&appid=d6ad1e5d413f9edc76af038fbf5dbe54";
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + "." + d.getDate() + "." + d.getFullYear();
+let newDate = `${d.getMonth()}.${d.getDate()}.${d.getFullYear()}`;
 
 // Event listener to add function to existing HTML DOM element
 document
@@ -21,7 +21,7 @@ function handleGenerateClick($event) {
   const content = document.querySelector("#feelings").value;
 
   if (zip && content) {
-    getWeatherData(apiURL, zip, apiKey).then(function (userData) {
+    getWeatherData(apiURL, zip.trim(), apiKey.trim()).then(function (userData) {
       postUserData("/postData", {
         date: newDate,
         temp: userData.main.temp,
